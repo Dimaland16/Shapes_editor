@@ -11,9 +11,10 @@ using Point = WinFormsApp_OOP_1.GraphicsFigures.Figures.Point;
 
 namespace WinFormsApp_OOP_2.Visitors
 {
-    internal class GraphicsVisitor : IVisitor
+    public class GraphicsVisitor : IVisitor
     {
         private Graphics graphics;
+
 
         public GraphicsVisitor(Graphics graphics)
         {
@@ -22,18 +23,16 @@ namespace WinFormsApp_OOP_2.Visitors
 
         public void VisitCircle(Circle circle)
         {
-
             int centerX = (circle.StartPoint.X + circle.EndPoint.X) / 2;
             int centerY = (circle.StartPoint.Y + circle.EndPoint.Y) / 2;
 
-            int radius = Math.Abs(circle.StartPoint.X - circle.EndPoint.X) / 2;
+            int x = centerX - circle.Radius;
+            int y = centerY - circle.Radius;
+            int diameter = circle.Radius * 2;
 
-            int x = centerX - radius;
-            int y = centerY - radius;
-            int diameter = radius * 2;
+            using var pen = new Pen(circle.IsSelected ? Color.Red : circle.Color, circle.PenWidth);
+            graphics.DrawEllipse(pen, x, y, diameter, diameter);
 
-
-            graphics.DrawEllipse(new Pen(Color.Black), x, y, diameter, diameter);
         }
 
         public void VisitQuadrilateral(Quadrilateral quadrilateral)
@@ -43,60 +42,64 @@ namespace WinFormsApp_OOP_2.Visitors
             int x2 = quadrilateral.EndPoint.X;
             int y2 = quadrilateral.EndPoint.Y;
 
-            System.Drawing.Point[] vertices = new System.Drawing.Point[]
-            {
+            System.Drawing.Point[] vertices =
+            [
                 new System.Drawing.Point(x1, y1),
                 new System.Drawing.Point(x2, y1),
                 new System.Drawing.Point(x1, y2),
                 new System.Drawing.Point(x2, y2)
-            };
-            graphics.DrawPolygon(new Pen(Color.Black), vertices);
+            ];
+
+            using var pen = new Pen(quadrilateral.IsSelected ? Color.Red : quadrilateral.Color, quadrilateral.PenWidth);
+            graphics.DrawPolygon(pen, vertices);
         }
 
         public void VisitRectangle(WinFormsApp_OOP_1.GraphicsFigures.Figures.Rectangle rectangle)
         {
-            int width = Math.Abs(rectangle.EndPoint.X - rectangle.StartPoint.X);
-            int height = Math.Abs(rectangle.EndPoint.Y - rectangle.StartPoint.Y);
-            System.Drawing.Rectangle _rectangle = new System.Drawing.Rectangle(rectangle.StartPoint.X, rectangle.StartPoint.Y, width, height);
-            graphics.DrawRectangle(new Pen(Color.Black), _rectangle);
+
+            System.Drawing.Rectangle _rectangle = new System.Drawing.Rectangle(rectangle.StartPoint.X, rectangle.StartPoint.Y, rectangle.Width, rectangle.Height);
+            
+            using var pen = new Pen(rectangle.IsSelected ? Color.Red : rectangle.Color, rectangle.PenWidth);
+
+            graphics.DrawRectangle(pen, _rectangle);
         }
 
         public void VisitSquare(Square square)
         {
-            int size = Math.Abs(square.EndPoint.X - square.StartPoint.X);
-            System.Drawing.Rectangle rectangle = new System.Drawing.Rectangle(square.StartPoint.X, square.StartPoint.Y, size, size);
-            graphics.DrawRectangle(new Pen(Color.Black), rectangle);
+            System.Drawing.Rectangle rectangle = new System.Drawing.Rectangle(square.StartPoint.X, square.StartPoint.Y, square.Size, square.Size);
+
+            using var pen = new Pen(square.IsSelected ? Color.Red : square.Color, square.PenWidth);
+
+            graphics.DrawRectangle(pen, rectangle);
         }
 
         public void VisitEllipse(Ellipse ellipse)
         {
-
-            int radiusX = Math.Abs(ellipse.StartPoint.X - ellipse.EndPoint.X) / 2;
-            int radiusY = Math.Abs(ellipse.StartPoint.Y - ellipse.EndPoint.Y) / 2;
-
             int centerX = (ellipse.StartPoint.X + ellipse.EndPoint.X) / 2;
             int centerY = (ellipse.StartPoint.Y + ellipse.EndPoint.Y) / 2;
 
-            int x = centerX - radiusX;
-            int y = centerY - radiusY;
+            int x = centerX - Math.Abs(ellipse.StartPoint.X - ellipse.EndPoint.X) / 2;
+            int y = centerY - Math.Abs(ellipse.StartPoint.Y - ellipse.EndPoint.Y) / 2;
 
-            int width = radiusX * 2;
-            int height = radiusY * 2;
+            System.Drawing.Rectangle rectangle = new System.Drawing.Rectangle(x, y, ellipse.Width, ellipse.Height);
 
-            System.Drawing.Rectangle rectangle = new System.Drawing.Rectangle(x, y, width, height);
+            using var pen = new Pen(ellipse.IsSelected ? Color.Red : ellipse.Color, ellipse.PenWidth);
 
-            graphics.DrawEllipse(new Pen(Color.Black), rectangle);
+            graphics.DrawEllipse(pen, rectangle);
         }
 
         public void VisitLine(Line line)
         {
-            graphics.DrawLine(new Pen(Color.Black), line.StartPoint, line.EndPoint);
+            using var pen = new Pen(line.IsSelected ? Color.Red : line.Color, line.PenWidth);
+
+            graphics.DrawLine(pen, line.StartPoint, line.EndPoint);
         }
 
         public void VisitPoint(Point point)
         {
-            graphics.DrawRectangle(new Pen(Color.Black), point.StartPoint.X, point.StartPoint.Y, 1, 1);
+            using var pen = new Pen(point.IsSelected ? Color.Red : point.Color, point.PenWidth);
 
+            graphics.DrawRectangle(pen, point.StartPoint.X, point.StartPoint.Y, 1, 1);
         }
     }
 }

@@ -1,9 +1,8 @@
-using System.Drawing;
-using System.Windows.Forms;
+using Newtonsoft.Json;
+using System.Xml.Serialization;
 using WinFormsApp_OOP_1.GraphicsFigures.Figures;
 using WinFormsApp_OOP_2.Drawers;
 using WinFormsApp_OOP_2.Visitors;
-using Point = WinFormsApp_OOP_1.GraphicsFigures.Figures.Point;
 
 namespace WinFormsApp_OOP_2
 {
@@ -16,6 +15,12 @@ namespace WinFormsApp_OOP_2
         }
 
         private List<IFigure> figuresList = new List<IFigure>();
+
+        XmlSerializer serializer;
+
+
+        IFigure selectedShape;
+
         private Pen pen;
         private Brush penColor;
         private Brush shapeColor;
@@ -51,7 +56,11 @@ namespace WinFormsApp_OOP_2
 
                 IFactory? facroty = (listBox.SelectedItem as ComboboxItem)?.Value as IFactory;
                 IFigure figure = facroty.Create(startPoint, endPoint);
+
                 figuresList.Add(figure);
+                listBox1.Items.Add(figure);
+
+                listBox1.SelectedItem = figure;
 
                 pictureBox1.Invalidate();
 
@@ -61,10 +70,149 @@ namespace WinFormsApp_OOP_2
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
             IVisitor visitor = new GraphicsVisitor(e.Graphics);
+
             foreach (IFigure figure in figuresList)
             {
                 figure.Accept(visitor);
             }
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            selectedShape.IsSelected = false;
+            var settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All,
+                Formatting = Formatting.Indented
+
+            };
+
+            var json = JsonConvert.SerializeObject(figuresList, settings);
+            File.WriteAllText("C:\\Users\\Dimaland\\Documents\\1\\figures.json", json);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            string json = File.ReadAllText("C:\\Users\\Dimaland\\Documents\\1\\figures.json");
+
+            var settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All,
+                Formatting = Formatting.Indented
+
+            };
+
+            figuresList = JsonConvert.DeserializeObject<List<IFigure>>(json, settings);
+
+            foreach (IFigure figure in figuresList)
+            {
+                listBox1.Items.Add(figure);
+            }
+
+            pictureBox1.Invalidate();
+        }
+
+        private void propertyGrid1_SelectedObjectsChanged(object sender, EventArgs e)
+        {
+            if (selectedShape != null)
+            {
+                selectedShape.IsSelected = false;
+            }
+
+            selectedShape = propertyGrid1.SelectedObject as IFigure;
+
+            if (selectedShape != null)
+            {
+                selectedShape.IsSelected = true;
+            }
+
+            pictureBox1.Invalidate();
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            propertyGrid1.SelectedObject = listBox1.SelectedItem;
+        }
+
+        private void listBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                if (listBox1.SelectedItem is IFigure selected)
+                {
+                    figuresList.Remove(selected);
+                    listBox1.Items.Remove(selected);
+
+                    pictureBox1.Invalidate();
+                }
+
+            }
+        }
+
+        private void propertyGrid1_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+        {
+            if (e.ChangedItem.PropertyDescriptor.Name == "Color")
+            {
+                selectedShape.IsSelected = false;
+            }
+
+            pictureBox1.Invalidate();
+
+        }
+
+        // Класс, представляющий контейнер для сериализации
+        [XmlRoot("Figures")]
+        public class FigureContainer
+        {
+            [XmlElement("Figure")]
+            public List<IFigure>? FiguresList { get; set; }
+        }
+
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            selectedShape.IsSelected = false;
+
+            FigureContainer container = new FigureContainer { FiguresList = figuresList };
+
+            // Сериализуем и сохраняем в XML файл
+            serializer = new XmlSerializer(typeof(FigureContainer));
+            using (TextWriter writer = new StreamWriter("C:\\Users\\Dimaland\\Documents\\1\\figures.xml"))
+            {
+                serializer.Serialize(writer, container);
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            // Десериализуем из XML файла
+            serializer = new XmlSerializer(typeof(FigureContainer));
+
+            FigureContainer deserializedContainer;
+            using (TextReader reader = new StreamReader("C:\\Users\\Dimaland\\Documents\\1\\figures.xml"))
+            {
+                deserializedContainer = (FigureContainer)serializer.Deserialize(reader);
+            }
+
+            figuresList = deserializedContainer.FiguresList;
+
+            foreach (IFigure figure in figuresList)
+            {
+                listBox1.Items.Add(figure);
+            }
+
+            pictureBox1.Invalidate();
+
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            figuresList.Clear();
+            listBox1.Items.Clear();
+            propertyGrid1.SelectedObject = null;
+            pictureBox1.Invalidate();
+
         }
     }
 }

@@ -11,7 +11,7 @@ using Rectangle = WinFormsApp_OOP_1.GraphicsFigures.Figures.Rectangle;
 
 namespace WinFormsApp_OOP_2.Visitors
 {
-    internal interface IVisitor
+    public interface IVisitor
     {
         void VisitEllipse(Ellipse ellipse);
         void VisitLine(Line line);
