@@ -23,10 +23,8 @@ namespace WinFormsApp_OOP_1.GraphicsFigures.Figures
         public System.Drawing.Point StartPoint { get; set; }
         public System.Drawing.Point EndPoint { get; set; }
         public abstract bool IsSelected { get; set; }
-        public Color Color { get; set; }
-        public float PenWidth { get; set; }
+/*        public Color Color { get; set; }
+        public float PenWidth { get; set; }*/
         public abstract void Accept(IVisitor visitor);
-        public abstract string GetFigureType();
-
     }
 } 

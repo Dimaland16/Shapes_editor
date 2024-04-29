@@ -43,14 +43,15 @@
             // listBox
             // 
             listBox.FormattingEnabled = true;
-            listBox.Location = new Point(2, -2);
+            listBox.Location = new Point(21, 12);
             listBox.Name = "listBox";
-            listBox.Size = new Size(150, 144);
+            listBox.RightToLeft = RightToLeft.No;
+            listBox.Size = new Size(119, 144);
             listBox.TabIndex = 1;
             // 
             // button1
             // 
-            button1.Location = new Point(2, 148);
+            button1.Location = new Point(2, 162);
             button1.Name = "button1";
             button1.Size = new Size(150, 29);
             button1.TabIndex = 3;
@@ -60,7 +61,7 @@
             // 
             // button2
             // 
-            button2.Location = new Point(2, 218);
+            button2.Location = new Point(2, 197);
             button2.Name = "button2";
             button2.Size = new Size(150, 29);
             button2.TabIndex = 4;
@@ -70,6 +71,7 @@
             // 
             // propertyGrid1
             // 
+            propertyGrid1.AccessibleName = "";
             propertyGrid1.Location = new Point(158, -2);
             propertyGrid1.Name = "propertyGrid1";
             propertyGrid1.Size = new Size(292, 310);
@@ -80,7 +82,7 @@
             // listBox1
             // 
             listBox1.FormattingEnabled = true;
-            listBox1.Location = new Point(12, 328);
+            listBox1.Location = new Point(61, 354);
             listBox1.Name = "listBox1";
             listBox1.Size = new Size(317, 304);
             listBox1.TabIndex = 6;
@@ -89,7 +91,7 @@
             // 
             // button3
             // 
-            button3.Location = new Point(2, 183);
+            button3.Location = new Point(2, 232);
             button3.Name = "button3";
             button3.Size = new Size(150, 29);
             button3.TabIndex = 7;
@@ -99,7 +101,7 @@
             // 
             // button4
             // 
-            button4.Location = new Point(2, 253);
+            button4.Location = new Point(2, 267);
             button4.Name = "button4";
             button4.Size = new Size(150, 29);
             button4.TabIndex = 8;
@@ -121,9 +123,9 @@
             // 
             // button6
             // 
-            button6.Location = new Point(344, 341);
+            button6.Location = new Point(2, 302);
             button6.Name = "button6";
-            button6.Size = new Size(94, 29);
+            button6.Size = new Size(150, 29);
             button6.TabIndex = 10;
             button6.Text = "clear";
             button6.UseVisualStyleBackColor = true;
@@ -146,6 +148,7 @@
             Name = "Form1";
             Text = "Form1";
             Load += Form1_Load;
+            Click += Form1_Click;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
         }

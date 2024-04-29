@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System.Windows.Forms;
 using System.Xml.Serialization;
 using WinFormsApp_OOP_1.GraphicsFigures.Figures;
 using WinFormsApp_OOP_2.Drawers;
@@ -17,13 +18,7 @@ namespace WinFormsApp_OOP_2
         private List<IFigure> figuresList = new List<IFigure>();
 
         XmlSerializer serializer;
-
-
         IFigure selectedShape;
-
-        private Pen pen;
-        private Brush penColor;
-        private Brush shapeColor;
 
         private System.Drawing.Point startPoint;
         private System.Drawing.Point endPoint;
@@ -152,7 +147,7 @@ namespace WinFormsApp_OOP_2
 
         private void propertyGrid1_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
-            if (e.ChangedItem.PropertyDescriptor.Name == "Color")
+            if (e.ChangedItem.PropertyDescriptor.Name == "FigureColor" || e.ChangedItem.PropertyDescriptor.Name == "OutlineColor")
             {
                 selectedShape.IsSelected = false;
             }
@@ -211,6 +206,19 @@ namespace WinFormsApp_OOP_2
             figuresList.Clear();
             listBox1.Items.Clear();
             propertyGrid1.SelectedObject = null;
+            pictureBox1.Invalidate();
+
+        }
+
+        private void Form1_Click(object sender, EventArgs e)
+        {
+            if (selectedShape != null)
+            {
+                selectedShape.IsSelected = false;
+            }
+            listBox1.SelectedItem = null;
+            propertyGrid1.SelectedObject = null;
+
             pictureBox1.Invalidate();
 
         }

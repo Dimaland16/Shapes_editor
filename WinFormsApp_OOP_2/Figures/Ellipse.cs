@@ -20,13 +20,27 @@ namespace WinFormsApp_OOP_1.GraphicsFigures.Figures
         public int Height { get; set; }
 
         [XmlIgnore]
-        public Color Color { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+
+        public Color OutlineColor { get; set; }
+
+        [XmlElement("OutlineColor")]
+        public string OutlineColorString
+        {
+            get { return OutlineColor.Name; }
+            set { OutlineColor = Color.FromName(value); }
+        }
+
+        [XmlIgnore]
+        [Newtonsoft.Json.JsonIgnore]
+
+        public Color FigureColor { get; set; }
 
         [XmlElement("FigureColor")]
-        public int ColorArgb
+        public string FigureColorArgb
         {
-            get { return Color.ToArgb(); }
-            set { Color = Color.FromArgb(value); }
+            get { return FigureColor.Name; }
+            set { FigureColor = Color.FromName(value); }
         }
 
         public float PenWidth { get; set; }
@@ -39,8 +53,9 @@ namespace WinFormsApp_OOP_1.GraphicsFigures.Figures
         {
             StartPoint = startPoint;
             EndPoint = endPoint;
-            Color = Color.Black;
-            PenWidth = 1;
+            OutlineColor = Color.Black;
+            FigureColor = Color.White;
+            PenWidth = 2;
 
 
             Width = Math.Abs(StartPoint.X - EndPoint.X);
@@ -58,11 +73,6 @@ namespace WinFormsApp_OOP_1.GraphicsFigures.Figures
         public override string ToString()
         {
             return $"Ellipse ({StartPoint}, {EndPoint})";
-        }
-
-        public override string GetFigureType()
-        {
-            return "Ellipse";
         }
     }
 }

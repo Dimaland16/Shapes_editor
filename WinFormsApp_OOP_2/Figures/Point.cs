@@ -17,24 +17,27 @@ namespace WinFormsApp_OOP_1.GraphicsFigures.Figures
         public System.Drawing.Point StartPoint { get; set; }
         public System.Drawing.Point EndPoint { get; set; }
         public override bool IsSelected { get; set; } = false;
-        [XmlIgnore]
-        public Color Color { get; set; }
 
-        [XmlElement("FigureColor")]
-        public int ColorArgb
+        [XmlIgnore]
+        [Newtonsoft.Json.JsonIgnore]
+
+        public Color OutlineColor { get; set; }
+
+        [XmlElement("OutlineColor")]
+        public string OutlineColorArgb
         {
-            get { return Color.ToArgb(); }
-            set { Color = Color.FromArgb(value); }
+            get { return OutlineColor.Name; }
+            set { OutlineColor = Color.FromName(value); }
         }
+
         public float PenWidth { get; set; }
 
         public Point(System.Drawing.Point startPoint, System.Drawing.Point endPoint)
         {
             StartPoint = startPoint;
             EndPoint = endPoint;
-            Color = Color.Black;
-            PenWidth = 1;
-
+            OutlineColor = Color.Black;
+            PenWidth = 2;
         }
 
         public override void Accept(IVisitor visitor)
@@ -45,11 +48,6 @@ namespace WinFormsApp_OOP_1.GraphicsFigures.Figures
         public override string ToString()
         {
             return $"Point ({StartPoint}, {EndPoint})";
-        }
-
-        public override string GetFigureType()
-        {
-            return "Point";
         }
     }
 }

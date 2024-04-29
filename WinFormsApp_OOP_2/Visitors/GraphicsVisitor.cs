@@ -30,7 +30,12 @@ namespace WinFormsApp_OOP_2.Visitors
             int y = centerY - circle.Radius;
             int diameter = circle.Radius * 2;
 
-            using var pen = new Pen(circle.IsSelected ? Color.Red : circle.Color, circle.PenWidth);
+            using (var brush = new SolidBrush(circle.FigureColor))
+            {
+                graphics.FillEllipse(brush, x, y, diameter, diameter);
+            }
+
+            using var pen = new Pen(circle.IsSelected ? Color.Red : circle.OutlineColor, circle.PenWidth);
             graphics.DrawEllipse(pen, x, y, diameter, diameter);
 
         }
@@ -50,7 +55,12 @@ namespace WinFormsApp_OOP_2.Visitors
                 new System.Drawing.Point(x2, y2)
             ];
 
-            using var pen = new Pen(quadrilateral.IsSelected ? Color.Red : quadrilateral.Color, quadrilateral.PenWidth);
+            using (var brush = new SolidBrush(quadrilateral.FigureColor))
+            {
+                graphics.FillPolygon(brush, vertices);
+            }
+
+            using var pen = new Pen(quadrilateral.IsSelected ? Color.Red : quadrilateral.OutlineColor, quadrilateral.PenWidth);
             graphics.DrawPolygon(pen, vertices);
         }
 
@@ -58,8 +68,13 @@ namespace WinFormsApp_OOP_2.Visitors
         {
 
             System.Drawing.Rectangle _rectangle = new System.Drawing.Rectangle(rectangle.StartPoint.X, rectangle.StartPoint.Y, rectangle.Width, rectangle.Height);
-            
-            using var pen = new Pen(rectangle.IsSelected ? Color.Red : rectangle.Color, rectangle.PenWidth);
+
+            using (var brush = new SolidBrush(rectangle.FigureColor))
+            {
+                graphics.FillRectangle(brush, _rectangle);
+            }
+
+            using var pen = new Pen(rectangle.IsSelected ? Color.Red : rectangle.OutlineColor, rectangle.PenWidth);
 
             graphics.DrawRectangle(pen, _rectangle);
         }
@@ -68,7 +83,12 @@ namespace WinFormsApp_OOP_2.Visitors
         {
             System.Drawing.Rectangle rectangle = new System.Drawing.Rectangle(square.StartPoint.X, square.StartPoint.Y, square.Size, square.Size);
 
-            using var pen = new Pen(square.IsSelected ? Color.Red : square.Color, square.PenWidth);
+            using (var brush = new SolidBrush(square.FigureColor))
+            {
+                graphics.FillRectangle(brush, rectangle);
+            }
+
+            using var pen = new Pen(square.IsSelected ? Color.Red : square.OutlineColor, square.PenWidth);
 
             graphics.DrawRectangle(pen, rectangle);
         }
@@ -83,21 +103,26 @@ namespace WinFormsApp_OOP_2.Visitors
 
             System.Drawing.Rectangle rectangle = new System.Drawing.Rectangle(x, y, ellipse.Width, ellipse.Height);
 
-            using var pen = new Pen(ellipse.IsSelected ? Color.Red : ellipse.Color, ellipse.PenWidth);
+            using (var brush = new SolidBrush(ellipse.FigureColor))
+            {
+                graphics.FillEllipse(brush, rectangle);
+            }
+
+            using var pen = new Pen(ellipse.IsSelected ? Color.Red : ellipse.OutlineColor, ellipse.PenWidth);
 
             graphics.DrawEllipse(pen, rectangle);
         }
 
         public void VisitLine(Line line)
         {
-            using var pen = new Pen(line.IsSelected ? Color.Red : line.Color, line.PenWidth);
+            using var pen = new Pen(line.IsSelected ? Color.Red : line.OutlineColor, line.PenWidth);
 
             graphics.DrawLine(pen, line.StartPoint, line.EndPoint);
         }
 
         public void VisitPoint(Point point)
         {
-            using var pen = new Pen(point.IsSelected ? Color.Red : point.Color, point.PenWidth);
+            using var pen = new Pen(point.IsSelected ? Color.Red : point.OutlineColor, point.PenWidth);
 
             graphics.DrawRectangle(pen, point.StartPoint.X, point.StartPoint.Y, 1, 1);
         }
