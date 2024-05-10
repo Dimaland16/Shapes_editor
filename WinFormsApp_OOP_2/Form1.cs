@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System.Reflection;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 using WinFormsApp_OOP_1.GraphicsFigures.Figures;
@@ -32,6 +33,7 @@ namespace WinFormsApp_OOP_2
             listBox.Items.Add(new ComboboxItem() { Text = "Quadrilateral", Value = new QuadrilateralFactory() });
             listBox.Items.Add(new ComboboxItem() { Text = "Rectangle", Value = new RectangleFactory() });
             listBox.Items.Add(new ComboboxItem() { Text = "Square", Value = new SquareFactory() });
+
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
@@ -75,7 +77,9 @@ namespace WinFormsApp_OOP_2
 
         private void button1_Click(object sender, EventArgs e)
         {
-            selectedShape.IsSelected = false;
+            if (selectedShape != null)
+                selectedShape.IsSelected = false;
+
             var settings = new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.All,
@@ -167,7 +171,8 @@ namespace WinFormsApp_OOP_2
 
         private void button3_Click(object sender, EventArgs e)
         {
-            selectedShape.IsSelected = false;
+            if (selectedShape != null)
+                selectedShape.IsSelected = false;
 
             FigureContainer container = new FigureContainer { FiguresList = figuresList };
 
