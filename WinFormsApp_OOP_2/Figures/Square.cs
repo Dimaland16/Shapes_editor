@@ -14,35 +14,7 @@ namespace WinFormsApp_OOP_1.GraphicsFigures.Figures
     {
         public Square() { }
 
-        public System.Drawing.Point StartPoint { get; set; }
-        public System.Drawing.Point EndPoint { get; set; }
-
-
-        [XmlIgnore]
-        [Newtonsoft.Json.JsonIgnore]
-        public Color OutlineColor { get; set; }
-
-        [XmlElement("OutlineColor")]
-        public string OutlineColorString
-        {
-            get { return OutlineColor.Name; }
-            set { OutlineColor = Color.FromName(value); }
-        }
-
-        [XmlIgnore]
-        [Newtonsoft.Json.JsonIgnore]
-        public Color FigureColor { get; set; }
-
-        [XmlElement("FigureColor")]
-        public string FigureColorArgb
-        {
-            get { return FigureColor.Name; }
-            set { FigureColor = Color.FromName(value); }
-        }
-
         public int Size { get; set; }
-        public float PenWidth { get; set; }
-        public override bool IsSelected { get; set; } = false;
 
         public Square(System.Drawing.Point startPoint, System.Drawing.Point endPoint)
         {
@@ -50,9 +22,8 @@ namespace WinFormsApp_OOP_1.GraphicsFigures.Figures
             EndPoint = endPoint;
             Size = Math.Abs(EndPoint.X - StartPoint.X);
             OutlineColor = Color.Black;
-            FigureColor = Color.White;
+            FigureColor = Color.Transparent;
             PenWidth = 2;
-
         }
 
         public override void Accept(IVisitor visitor)
