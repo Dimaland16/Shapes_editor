@@ -177,8 +177,10 @@ namespace WinFormsApp_OOP_2
 
             FigureContainer container = new FigureContainer { FiguresList = figuresList };
 
+            var knownTypes = FigureTypeLoader.LoadFigureTypes("C:\\Users\\Dimaland\\source\\repos\\Dimaland16\\WinFormsApp_OOP_2\\WinFormsLibrary1\\bin\\Debug\\net8.0-windows");
+
             // Сериализуем и сохраняем в XML файл
-            serializer = new XmlSerializer(typeof(FigureContainer));
+            serializer = new XmlSerializer(typeof(FigureContainer), knownTypes.ToArray());
             using (TextWriter writer = new StreamWriter("C:\\Users\\Dimaland\\Documents\\1\\figures.xml"))
             {
                 serializer.Serialize(writer, container);
@@ -187,8 +189,10 @@ namespace WinFormsApp_OOP_2
 
         private void button4_Click(object sender, EventArgs e)
         {
+            var knownTypes = FigureTypeLoader.LoadFigureTypes("C:\\Users\\Dimaland\\source\\repos\\Dimaland16\\WinFormsApp_OOP_2\\WinFormsLibrary1\\bin\\Debug\\net8.0-windows");
+
             // Десериализуем из XML файла
-            serializer = new XmlSerializer(typeof(FigureContainer));
+            serializer = new XmlSerializer(typeof(FigureContainer), knownTypes.ToArray());
 
             FigureContainer deserializedContainer;
             using (TextReader reader = new StreamReader("C:\\Users\\Dimaland\\Documents\\1\\figures.xml"))
@@ -205,6 +209,24 @@ namespace WinFormsApp_OOP_2
 
             pictureBox1.Invalidate();
 
+        }
+
+        public static class FigureTypeLoader
+        {
+            public static List<Type> LoadFigureTypes(string path)
+            {
+                var types = new List<Type>();
+
+                foreach (var file in Directory.GetFiles(path, "*.dll"))
+                {
+                    var assembly = Assembly.LoadFrom(file);
+                    var figureTypes = assembly.GetTypes().Where(t => typeof(IFigure).IsAssignableFrom(t) && !t.IsInterface);
+
+                    types.AddRange(figureTypes);
+                }
+
+                return types;
+            }
         }
 
         private void button6_Click(object sender, EventArgs e)
