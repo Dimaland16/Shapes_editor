@@ -7,7 +7,7 @@ using Point = System.Drawing.Point;
 namespace WinFormsLibrary1
 {
     public class Triangle : IFigure
-    {
+    { 
         public Triangle() { }
 
         public Triangle(Point startPoint, Point endPoint)
