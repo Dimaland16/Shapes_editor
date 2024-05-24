@@ -37,6 +37,7 @@
             button4 = new Button();
             pictureBox1 = new PictureBox();
             button6 = new Button();
+            buttonAdd = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -82,7 +83,7 @@
             // listBox1
             // 
             listBox1.FormattingEnabled = true;
-            listBox1.Location = new Point(61, 354);
+            listBox1.Location = new Point(114, 370);
             listBox1.Name = "listBox1";
             listBox1.Size = new Size(317, 304);
             listBox1.TabIndex = 6;
@@ -131,11 +132,22 @@
             button6.UseVisualStyleBackColor = true;
             button6.Click += button6_Click;
             // 
+            // buttonAdd
+            // 
+            buttonAdd.Location = new Point(2, 337);
+            buttonAdd.Name = "buttonAdd";
+            buttonAdd.Size = new Size(150, 29);
+            buttonAdd.TabIndex = 11;
+            buttonAdd.Text = "add";
+            buttonAdd.UseVisualStyleBackColor = true;
+            buttonAdd.Click += buttonAdd_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1260, 686);
+            Controls.Add(buttonAdd);
             Controls.Add(button6);
             Controls.Add(pictureBox1);
             Controls.Add(button4);
@@ -164,5 +176,6 @@
         private Button button4;
         private PictureBox pictureBox1;
         private Button button6;
+        private Button buttonAdd;
     }
 }

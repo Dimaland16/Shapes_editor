@@ -15,10 +15,30 @@ namespace WinFormsApp_OOP_2.Visitors
     {
         private Graphics graphics;
 
+        private static readonly Dictionary<Type, Action<Graphics, object>> drawMethods = new Dictionary<Type, Action<Graphics, object>>();
+
 
         public GraphicsVisitor(Graphics graphics)
         {
             this.graphics = graphics;
+        }
+
+        public void RegisterDrawMethod(Type shapeType, Action<Graphics, object> drawMethod)
+        {
+            drawMethods[shapeType] = drawMethod;
+        }
+
+        public void Visit(dynamic shape)
+        {
+            var shapeType = shape.GetType();
+            if (drawMethods.ContainsKey(shapeType))
+            {
+                drawMethods[shapeType].Invoke(graphics, shape);
+            }
+            else
+            {
+                throw new NotSupportedException($"Draw method for {shapeType.Name} is not registered.");
+            }
         }
 
         public void VisitCircle(Circle circle)

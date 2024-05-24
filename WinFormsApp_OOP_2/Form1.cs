@@ -16,6 +16,7 @@ namespace WinFormsApp_OOP_2
             InitializeComponent();
         }
 
+        private GraphicsVisitor graphicsVisitor;
         private List<IFigure> figuresList = new List<IFigure>();
 
         XmlSerializer serializer;
@@ -66,11 +67,11 @@ namespace WinFormsApp_OOP_2
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
-            IVisitor visitor = new GraphicsVisitor(e.Graphics);
+            graphicsVisitor = new GraphicsVisitor(e.Graphics);
 
             foreach (IFigure figure in figuresList)
             {
-                figure.Accept(visitor);
+                figure.Accept(graphicsVisitor);
             }
 
         }
@@ -226,6 +227,50 @@ namespace WinFormsApp_OOP_2
 
             pictureBox1.Invalidate();
 
+        }
+
+        private void buttonAdd_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "DLL files (*.dll)|*.dll|All files (*.*)|*.*";
+                openFileDialog.InitialDirectory = "C:\\Users\\Dimaland\\source\\repos\\Dimaland16\\WinFormsApp_OOP_2\\WinFormsLibrary1\\bin\\Debug\\net8.0-windows";
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string assemblyPath = openFileDialog.FileName;
+                    LoadAndRegisterShapeLibrary(assemblyPath);
+                }
+            }
+        }
+
+        private void LoadAndRegisterShapeLibrary(string assemblyPath)
+        {
+            Assembly newShapesAssembly = Assembly.LoadFrom(assemblyPath);
+
+            // Найдите все фабрики в загруженной библиотеке
+            var factoryTypes = newShapesAssembly.GetTypes().Where(t => typeof(IFactory).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract);
+
+            foreach (var factoryType in factoryTypes)
+            {
+                // Создаем экземпляр фабрики
+                IFactory factory = (IFactory)Activator.CreateInstance(factoryType);
+
+                // Предположим, что название фабрики совпадает с названием фигуры (например, TriangleFactory создает Triangle)
+                string shapeTypeName = factoryType.Name.Replace("Factory", "");
+                Type shapeType = newShapesAssembly.GetType($"WinFormsLibrary1.{shapeTypeName}");
+
+                // Создаем экземпляр фигуры, чтобы получить её тип
+                IFigure shape = factory.Create(startPoint, endPoint);
+
+                // Найдите и зарегистрируйте метод рисования
+                string drawMethodName = $"{shapeTypeName}DrawMethod";
+                MethodInfo drawMethod = newShapesAssembly.GetType($"WinFormsLibrary1.{drawMethodName}").GetMethod("Draw");
+
+                graphicsVisitor.RegisterDrawMethod(shape.GetType(), (graphics, s) => drawMethod.Invoke(null, new object[] { graphics, s }));
+
+                listBox.Items.Add(new ComboboxItem() { Text = shapeTypeName, Value = factory });
+            }
         }
     }
 }

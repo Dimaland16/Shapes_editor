@@ -13,6 +13,7 @@ namespace WinFormsApp_OOP_2.Visitors
 {
     public interface IVisitor
     {
+        void Visit(dynamic shape);
         void VisitEllipse(Ellipse ellipse);
         void VisitLine(Line line);
         void VisitRectangle(Rectangle rectangle);
