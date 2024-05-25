@@ -10,6 +10,8 @@ namespace WinFormsApp_OOP_2
 {
     public partial class Form1 : Form
     {
+        private List<IShapePlugin> _plugins = new List<IShapePlugin>();
+        private ShapeProcessor _shapeProcessor = new ShapeProcessor(new List<IShapePlugin>());
 
         public Form1()
         {
@@ -211,24 +213,6 @@ namespace WinFormsApp_OOP_2
 
         }
 
-        public static class FigureTypeLoader
-        {
-            public static List<Type> LoadFigureTypes(string path)
-            {
-                var types = new List<Type>();
-
-                foreach (var file in Directory.GetFiles(path, "*.dll"))
-                {
-                    var assembly = Assembly.LoadFrom(file);
-                    var figureTypes = assembly.GetTypes().Where(t => typeof(IFigure).IsAssignableFrom(t) && !t.IsInterface);
-
-                    types.AddRange(figureTypes);
-                }
-
-                return types;
-            }
-        }
-
         private void button6_Click(object sender, EventArgs e)
         {
             figuresList.Clear();
@@ -270,28 +254,83 @@ namespace WinFormsApp_OOP_2
         {
             Assembly newShapesAssembly = Assembly.LoadFrom(assemblyPath);
 
-            // Найдите все фабрики в загруженной библиотеке
             var factoryTypes = newShapesAssembly.GetTypes().Where(t => typeof(IFactory).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract);
 
             foreach (var factoryType in factoryTypes)
             {
-                // Создаем экземпляр фабрики
                 IFactory factory = (IFactory)Activator.CreateInstance(factoryType);
 
-                // Предположим, что название фабрики совпадает с названием фигуры (например, TriangleFactory создает Triangle)
                 string shapeTypeName = factoryType.Name.Replace("Factory", "");
                 Type shapeType = newShapesAssembly.GetType($"WinFormsLibrary1.{shapeTypeName}");
 
-                // Создаем экземпляр фигуры, чтобы получить её тип
                 IFigure shape = factory.Create(startPoint, endPoint);
 
-                // Найдите и зарегистрируйте метод рисования
                 string drawMethodName = $"{shapeTypeName}DrawMethod";
                 MethodInfo drawMethod = newShapesAssembly.GetType($"WinFormsLibrary1.{drawMethodName}").GetMethod("Draw");
 
                 graphicsVisitor.RegisterDrawMethod(shape.GetType(), (graphics, s) => drawMethod.Invoke(null, new object[] { graphics, s }));
 
                 listBox.Items.Add(new ComboboxItem() { Text = shapeTypeName, Value = factory });
+            }
+        }
+
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            string pluginDirectory = "C:\\Users\\Dimaland\\source\\repos\\Dimaland16\\WinFormsApp_OOP_2\\WinFormsLibrary2\\bin\\Debug\\net8.0-windows";
+
+
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Assembly Files|*.dll";
+            openFileDialog.InitialDirectory = pluginDirectory;
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                var pluginPath = openFileDialog.FileName;
+                var loadedPlugins = PluginLoader.LoadPlugins(Path.GetDirectoryName(pluginPath));
+
+                // Обновляем известные плагины для обработки данных
+                _plugins.AddRange(loadedPlugins);
+                _shapeProcessor = new ShapeProcessor(_plugins);
+
+                // Добавляем плагины в меню
+                pluginsToolStripMenuItem.DropDownItems.Clear();
+                foreach (var plugin in _plugins)
+                {
+                    var menuItem = new ToolStripMenuItem(plugin.Name);
+                    pluginsToolStripMenuItem.DropDownItems.Add(menuItem);
+                }
+            }
+        }
+
+        private void jsonDeserialization_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                if (selectedShape != null)
+                    selectedShape.IsSelected = false;
+
+                figuresList = _shapeProcessor.LoadShapes(openFileDialog.FileName);
+
+                foreach (IFigure figure in figuresList)
+                {
+                    listBox1.Items.Add(figure);
+                }
+
+                pictureBox1.Invalidate();
+            }
+        }
+
+        private void jsonSerialization_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                if (selectedShape != null)
+                    selectedShape.IsSelected = false;
+
+                _shapeProcessor.SaveShapes(figuresList, saveFileDialog.FileName);
             }
         }
     }

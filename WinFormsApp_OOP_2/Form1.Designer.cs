@@ -38,13 +38,19 @@
             pictureBox1 = new PictureBox();
             button6 = new Button();
             buttonAdd = new Button();
+            menuStrip = new MenuStrip();
+            pluginsToolStripMenuItem = new ToolStripMenuItem();
+            jsonDeserialization = new Button();
+            jsonSerialization = new Button();
+            button8 = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            menuStrip.SuspendLayout();
             SuspendLayout();
             // 
             // listBox
             // 
             listBox.FormattingEnabled = true;
-            listBox.Location = new Point(21, 12);
+            listBox.Location = new Point(21, 51);
             listBox.Name = "listBox";
             listBox.RightToLeft = RightToLeft.No;
             listBox.Size = new Size(119, 144);
@@ -52,28 +58,30 @@
             // 
             // button1
             // 
-            button1.Location = new Point(2, 162);
+            button1.Location = new Point(2, 201);
             button1.Name = "button1";
             button1.Size = new Size(150, 29);
             button1.TabIndex = 3;
             button1.Text = "jsonSerialization";
             button1.UseVisualStyleBackColor = true;
+            button1.Visible = false;
             button1.Click += button1_Click;
             // 
             // button2
             // 
-            button2.Location = new Point(2, 197);
+            button2.Location = new Point(2, 236);
             button2.Name = "button2";
             button2.Size = new Size(150, 29);
             button2.TabIndex = 4;
             button2.Text = "jsonDeserialization";
             button2.UseVisualStyleBackColor = true;
+            button2.Visible = false;
             button2.Click += button2_Click;
             // 
             // propertyGrid1
             // 
             propertyGrid1.AccessibleName = "";
-            propertyGrid1.Location = new Point(158, -2);
+            propertyGrid1.Location = new Point(158, 37);
             propertyGrid1.Name = "propertyGrid1";
             propertyGrid1.Size = new Size(292, 310);
             propertyGrid1.TabIndex = 5;
@@ -83,7 +91,7 @@
             // listBox1
             // 
             listBox1.FormattingEnabled = true;
-            listBox1.Location = new Point(114, 370);
+            listBox1.Location = new Point(114, 409);
             listBox1.Name = "listBox1";
             listBox1.Size = new Size(317, 304);
             listBox1.TabIndex = 6;
@@ -92,7 +100,7 @@
             // 
             // button3
             // 
-            button3.Location = new Point(2, 232);
+            button3.Location = new Point(2, 271);
             button3.Name = "button3";
             button3.Size = new Size(150, 29);
             button3.TabIndex = 7;
@@ -102,7 +110,7 @@
             // 
             // button4
             // 
-            button4.Location = new Point(2, 267);
+            button4.Location = new Point(2, 306);
             button4.Name = "button4";
             button4.Size = new Size(150, 29);
             button4.TabIndex = 8;
@@ -113,7 +121,7 @@
             // pictureBox1
             // 
             pictureBox1.BackColor = SystemColors.ControlLightLight;
-            pictureBox1.Location = new Point(456, -2);
+            pictureBox1.Location = new Point(456, 37);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(804, 689);
             pictureBox1.TabIndex = 2;
@@ -124,7 +132,7 @@
             // 
             // button6
             // 
-            button6.Location = new Point(2, 302);
+            button6.Location = new Point(2, 341);
             button6.Name = "button6";
             button6.Size = new Size(150, 29);
             button6.TabIndex = 10;
@@ -134,7 +142,7 @@
             // 
             // buttonAdd
             // 
-            buttonAdd.Location = new Point(2, 337);
+            buttonAdd.Location = new Point(2, 376);
             buttonAdd.Name = "buttonAdd";
             buttonAdd.Size = new Size(150, 29);
             buttonAdd.TabIndex = 11;
@@ -142,11 +150,60 @@
             buttonAdd.UseVisualStyleBackColor = true;
             buttonAdd.Click += buttonAdd_Click;
             // 
+            // menuStrip
+            // 
+            menuStrip.ImageScalingSize = new Size(20, 20);
+            menuStrip.Items.AddRange(new ToolStripItem[] { pluginsToolStripMenuItem });
+            menuStrip.Location = new Point(0, 0);
+            menuStrip.Name = "menuStrip";
+            menuStrip.Size = new Size(1260, 28);
+            menuStrip.TabIndex = 12;
+            menuStrip.Text = "menuStrip1";
+            // 
+            // pluginsToolStripMenuItem
+            // 
+            pluginsToolStripMenuItem.Name = "pluginsToolStripMenuItem";
+            pluginsToolStripMenuItem.Size = new Size(70, 24);
+            pluginsToolStripMenuItem.Text = "Plugins";
+            // 
+            // jsonDeserialization
+            // 
+            jsonDeserialization.Location = new Point(158, 366);
+            jsonDeserialization.Name = "jsonDeserialization";
+            jsonDeserialization.Size = new Size(150, 29);
+            jsonDeserialization.TabIndex = 13;
+            jsonDeserialization.Text = "jsonDeserialization";
+            jsonDeserialization.UseVisualStyleBackColor = true;
+            jsonDeserialization.Click += jsonDeserialization_Click;
+            // 
+            // jsonSerialization
+            // 
+            jsonSerialization.Location = new Point(309, 366);
+            jsonSerialization.Name = "jsonSerialization";
+            jsonSerialization.Size = new Size(141, 29);
+            jsonSerialization.TabIndex = 14;
+            jsonSerialization.Text = "jsonSerialization";
+            jsonSerialization.UseVisualStyleBackColor = true;
+            jsonSerialization.Click += jsonSerialization_Click;
+            // 
+            // button8
+            // 
+            button8.Location = new Point(12, 424);
+            button8.Name = "button8";
+            button8.Size = new Size(94, 29);
+            button8.TabIndex = 15;
+            button8.Text = "load";
+            button8.UseVisualStyleBackColor = true;
+            button8.Click += button8_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1260, 686);
+            ClientSize = new Size(1260, 761);
+            Controls.Add(button8);
+            Controls.Add(jsonSerialization);
+            Controls.Add(jsonDeserialization);
             Controls.Add(buttonAdd);
             Controls.Add(button6);
             Controls.Add(pictureBox1);
@@ -157,12 +214,17 @@
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(listBox);
+            Controls.Add(menuStrip);
+            MainMenuStrip = menuStrip;
             Name = "Form1";
             Text = "Form1";
             Load += Form1_Load;
             Click += Form1_Click;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            menuStrip.ResumeLayout(false);
+            menuStrip.PerformLayout();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -177,5 +239,10 @@
         private PictureBox pictureBox1;
         private Button button6;
         private Button buttonAdd;
+        private MenuStrip menuStrip;
+        private ToolStripMenuItem pluginsToolStripMenuItem;
+        private Button jsonDeserialization;
+        private Button jsonSerialization;
+        private Button button8;
     }
 }
