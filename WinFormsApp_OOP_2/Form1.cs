@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Xml.Serialization;
@@ -20,6 +21,8 @@ namespace WinFormsApp_OOP_2
 
         private GraphicsVisitor graphicsVisitor;
         private List<IFigure> figuresList = new List<IFigure>();
+
+        ArchivatorAdapter archivator;
 
         XmlSerializer serializer;
         IFigure selectedShape;
@@ -289,18 +292,16 @@ namespace WinFormsApp_OOP_2
                 var pluginPath = openFileDialog.FileName;
                 var loadedPlugins = PluginLoader.LoadPlugins(Path.GetDirectoryName(pluginPath));
 
-                // ќбновл€ем известные плагины дл€ обработки данных
                 _plugins.AddRange(loadedPlugins);
                 _shapeProcessor = new ShapeProcessor(_plugins);
 
-                // ƒобавл€ем плагины в меню
-                pluginsToolStripMenuItem.DropDownItems.Clear();
                 foreach (var plugin in _plugins)
                 {
                     var menuItem = new ToolStripMenuItem(plugin.Name);
                     pluginsToolStripMenuItem.DropDownItems.Add(menuItem);
                 }
             }
+
         }
 
         private void jsonDeserialization_Click(object sender, EventArgs e)
@@ -331,6 +332,93 @@ namespace WinFormsApp_OOP_2
                     selectedShape.IsSelected = false;
 
                 _shapeProcessor.SaveShapes(figuresList, saveFileDialog.FileName);
+            }
+        }
+
+        private void buttonLoadPlugin_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "DLL files (*.dll)|*.dll|All files (*.*)|*.*",
+                InitialDirectory = "C:\\Users\\Dimaland\\Downloads\\UserArchievePlugin (1)\\UserArchievePlugin\\bin\\Debug\\net7.0-windows"
+            };
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string assemblyPath = openFileDialog.FileName;
+                try
+                {
+                    archivator = new ArchivatorAdapter(assemblyPath);
+                    MessageBox.Show("Plugin loaded successfully!");
+
+                    ToolStripMenuItem functionsToolMenuItem = new ToolStripMenuItem(archivator.ToString());
+
+                    ToolStripMenuItem saveToZipMenuItem = new ToolStripMenuItem("Save to ZIP");
+                    saveToZipMenuItem.Click += SaveToZipMenuItem_Click;
+
+                    ToolStripMenuItem openZipMenuItem = new ToolStripMenuItem("Open ZIP");
+                    openZipMenuItem.Click += OpenZipMenuItem_Click;
+
+                    functionsToolMenuItem.DropDownItems.Add(saveToZipMenuItem);
+                    functionsToolMenuItem.DropDownItems.Add(openZipMenuItem);
+
+                    pluginsToolStripMenuItem.DropDownItems.Add(functionsToolMenuItem);
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Failed to load plugin: {ex.Message}");
+                }
+            }
+        }
+
+        private void SaveToZipMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "ZIP files (*.zip)|*.zip|All files (*.*)|*.*",
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+            };
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string filePath = "C:\\Users\\Dimaland\\Documents\\1\\figures.xml";
+                string zipFilePath = saveFileDialog.FileName;
+
+                try
+                {
+                    archivator.ArchiveXmlFile(filePath, zipFilePath);
+                    MessageBox.Show($"File archived to: {zipFilePath}");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Failed to archive file: {ex.Message}");
+                }
+            }
+        }
+
+        private void OpenZipMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "ZIP files (*.zip)|*.zip|All files (*.*)|*.*",
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+            };
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string zipFilePath = openFileDialog.FileName;
+                string extractPath = "C:\\Users\\Dimaland\\Documents\\ExtractedFiles";
+
+                try
+                {
+                    archivator.UnzipArchive(zipFilePath, extractPath);
+                    MessageBox.Show($"Archive extracted to: {extractPath}");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Failed to extract archive: {ex.Message}");
+                }
             }
         }
     }

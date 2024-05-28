@@ -43,6 +43,7 @@
             jsonDeserialization = new Button();
             jsonSerialization = new Button();
             button8 = new Button();
+            buttonLoadPlugin = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             menuStrip.SuspendLayout();
             SuspendLayout();
@@ -196,11 +197,22 @@
             button8.UseVisualStyleBackColor = true;
             button8.Click += button8_Click;
             // 
+            // buttonLoadPlugin
+            // 
+            buttonLoadPlugin.Location = new Point(12, 469);
+            buttonLoadPlugin.Name = "buttonLoadPlugin";
+            buttonLoadPlugin.Size = new Size(94, 29);
+            buttonLoadPlugin.TabIndex = 16;
+            buttonLoadPlugin.Text = "buttonLoadPlugin";
+            buttonLoadPlugin.UseVisualStyleBackColor = true;
+            buttonLoadPlugin.Click += buttonLoadPlugin_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1260, 761);
+            Controls.Add(buttonLoadPlugin);
             Controls.Add(button8);
             Controls.Add(jsonSerialization);
             Controls.Add(jsonDeserialization);
@@ -244,5 +256,6 @@
         private Button jsonDeserialization;
         private Button jsonSerialization;
         private Button button8;
+        private Button buttonLoadPlugin;
     }
 }
