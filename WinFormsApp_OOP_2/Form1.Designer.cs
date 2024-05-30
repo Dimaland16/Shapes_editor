@@ -133,9 +133,9 @@
             // 
             // button6
             // 
-            button6.Location = new Point(2, 341);
+            button6.Location = new Point(10, 466);
             button6.Name = "button6";
-            button6.Size = new Size(150, 29);
+            button6.Size = new Size(98, 29);
             button6.TabIndex = 10;
             button6.Text = "clear";
             button6.UseVisualStyleBackColor = true;
@@ -143,9 +143,9 @@
             // 
             // buttonAdd
             // 
-            buttonAdd.Location = new Point(2, 376);
+            buttonAdd.Location = new Point(10, 420);
             buttonAdd.Name = "buttonAdd";
-            buttonAdd.Size = new Size(150, 29);
+            buttonAdd.Size = new Size(98, 29);
             buttonAdd.TabIndex = 11;
             buttonAdd.Text = "add";
             buttonAdd.UseVisualStyleBackColor = true;
@@ -189,21 +189,21 @@
             // 
             // button8
             // 
-            button8.Location = new Point(12, 424);
+            button8.Location = new Point(2, 341);
             button8.Name = "button8";
-            button8.Size = new Size(94, 29);
+            button8.Size = new Size(150, 29);
             button8.TabIndex = 15;
-            button8.Text = "load";
+            button8.Text = "MyPluginload";
             button8.UseVisualStyleBackColor = true;
             button8.Click += button8_Click;
             // 
             // buttonLoadPlugin
             // 
-            buttonLoadPlugin.Location = new Point(12, 469);
+            buttonLoadPlugin.Location = new Point(2, 374);
             buttonLoadPlugin.Name = "buttonLoadPlugin";
-            buttonLoadPlugin.Size = new Size(94, 29);
+            buttonLoadPlugin.Size = new Size(150, 29);
             buttonLoadPlugin.TabIndex = 16;
-            buttonLoadPlugin.Text = "buttonLoadPlugin";
+            buttonLoadPlugin.Text = "FriendPluginLoad";
             buttonLoadPlugin.UseVisualStyleBackColor = true;
             buttonLoadPlugin.Click += buttonLoadPlugin_Click;
             // 
